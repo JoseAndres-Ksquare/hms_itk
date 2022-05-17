@@ -14,6 +14,7 @@ interface User {
   phone_number: string; //varchar(10)
   address: string; //varchar(200)
   role: string; //varchar(100)
+  is_deleted: boolean; //soft_deleted
 }
 ```
 
@@ -22,8 +23,9 @@ interface User {
 ### This model is necessary because sensitive information will be recorded in it and later it will be useful for the appointments.
 
 ```ts
-interface Patient extends User {
-  patient_id: number; // references user.id
+interface Patient {
+  id_user: number; // foreing_key
+  id: number; // references user.id
   birth_date: string; //date
   age: number;
   blood_type: string; //varchar(10)
@@ -37,20 +39,11 @@ interface Patient extends User {
 ### This model will have official information from the doctor and will be useful for the appointment model
 
 ```ts
-interface Doctor extends User {
-  doctor_id: number; // references user.id
+interface Doctor {
+  user_id: number; // foreing_key
+  id: number; // references user.id
   medical_speciality: string; //varchar(100)
   professional_license: string; //varchar(100)
-}
-```
-
-## Admin Model
-
-### This model is necessary since with it the control of the entire system will be taken and you will be able to access the information of all users
-
-```ts
-interface Admin extends User {
-  admin_id: number; // references user.id
 }
 ```
 
@@ -60,7 +53,7 @@ interface Admin extends User {
 
 ```ts
 interface Appointments {
-  appointment_id: number;
+  id: number;
   appointment_date: string; //date
   doctor_info: Doctor; //  user/doctor id
   patient_info: Patient; // user/patient id
