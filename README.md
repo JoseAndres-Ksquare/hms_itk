@@ -24,7 +24,8 @@ interface User {
 
 ```ts
 interface Patient {
-  id_user: number; // foreing_key
+  id_user: string; // foreing_key
+  id_patient: string; // foreing_key
   id: number; // references user.id
   birth_date: string; //date
   age: number;

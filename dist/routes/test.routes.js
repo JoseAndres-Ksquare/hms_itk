@@ -9,17 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserRouter = void 0;
+exports.TestRouter = void 0;
 const express_1 = require("express");
-const profile_service_1 = require("../services/profile.service");
-exports.UserRouter = (0, express_1.Router)();
-exports.UserRouter.post("/createUser", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const userCreation = yield (0, profile_service_1.createUser)(req.body.first_name, req.body.last_name, req.body.email, req.body.password, req.body.phone_number, req.body.address);
-    res.statusCode = 200;
-    res.send(userCreation);
-}));
-exports.UserRouter.put("/softDelete", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const userStatus = yield (0, profile_service_1.userChangeState)(req.body.id, req.body.is_deleted);
-    res.statusCode = 200;
-    res.send("userStatus changed for the user with id: " + req.body.id);
+const methods_1 = require("../firebase/methods");
+exports.TestRouter = (0, express_1.Router)();
+exports.TestRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const info = yield (0, methods_1.getInfo)(req.body.idToken);
+    res.send(info);
 }));

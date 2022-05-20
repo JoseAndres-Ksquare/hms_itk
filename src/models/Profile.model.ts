@@ -7,33 +7,27 @@ import {
   Sequelize,
 } from "sequelize";
 
-export class User extends Model<
-  InferAttributes<User>,
-  InferCreationAttributes<User>
+export class Profile extends Model<
+  InferAttributes<Profile>,
+  InferCreationAttributes<Profile>
 > {
   declare id: CreationOptional<number>;
   declare first_name: string;
   declare last_name: string;
-  declare email: string;
-  declare password: string;
   declare phone_number: string;
   declare address: string;
-  declare role: string;
-  declare is_deleted: CreationOptional<boolean>;
+  declare user_id: string;
 }
 
-export const initUserModel = (sequelize: Sequelize) => {
-  User.init(
+export const initProfileModel = (sequelize: Sequelize) => {
+  Profile.init(
     {
       id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
       first_name: { type: DataTypes.STRING, allowNull: false },
       last_name: { type: DataTypes.STRING, allowNull: false },
-      email: { type: DataTypes.STRING, allowNull: false, unique: true },
-      password: { type: DataTypes.STRING, allowNull: false },
       phone_number: { type: DataTypes.STRING, allowNull: false },
       address: { type: DataTypes.STRING, allowNull: false },
-      role: { type: DataTypes.STRING, allowNull: false },
-      is_deleted: { type: DataTypes.BOOLEAN, defaultValue: false },
+      user_id: { type: DataTypes.STRING, allowNull: false },
     },
     { sequelize }
   );

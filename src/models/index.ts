@@ -1,7 +1,8 @@
 import { Sequelize } from "sequelize";
-import { initUserModel } from "./User.model";
+import { initProfileModel } from "./Profile.model";
+import { initPatientModel } from "./Patient.model";
 
-const models = [initUserModel];
+const models = [initProfileModel, initPatientModel];
 
 export let sequelize: Sequelize;
 export const initSequelize = (

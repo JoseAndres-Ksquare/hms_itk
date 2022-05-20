@@ -9,17 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserRouter = void 0;
+exports.PatientRouter = void 0;
 const express_1 = require("express");
-const profile_service_1 = require("../services/profile.service");
-exports.UserRouter = (0, express_1.Router)();
-exports.UserRouter.post("/createUser", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const userCreation = yield (0, profile_service_1.createUser)(req.body.first_name, req.body.last_name, req.body.email, req.body.password, req.body.phone_number, req.body.address);
+const hasRole_1 = require("../middlewares/hasRole");
+const isAuthenticated_1 = require("../middlewares/isAuthenticated");
+const patient_service_1 = require("../services/patient.service");
+exports.PatientRouter = (0, express_1.Router)();
+exports.PatientRouter.post("/createPatient", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: true }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const patient = yield (0, patient_service_1.createPatient)(req.body.birth_date, req.body.age, req.body.blood_type, req.body.alergies, req.body.gender, req.body.ProfileId);
     res.statusCode = 200;
-    res.send(userCreation);
-}));
-exports.UserRouter.put("/softDelete", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const userStatus = yield (0, profile_service_1.userChangeState)(req.body.id, req.body.is_deleted);
-    res.statusCode = 200;
-    res.send("userStatus changed for the user with id: " + req.body.id);
+    res.send(patient);
 }));

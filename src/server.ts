@@ -1,10 +1,13 @@
 import express, { Response, Request } from "express";
 import dotenv from "dotenv";
 import { initSequelize } from "./models";
-import { UserRouter } from "./routes/user.route";
+import { ProfileRouter } from "./routes/Profile.routes";
+import * as admin from "firebase-admin";
+import { UserRouter } from "./routes/User.routes";
+import { PatientRouter } from "./routes/Patient.routes";
 
 dotenv.config();
-
+admin.initializeApp();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -18,7 +21,9 @@ app.use(express.json());
 
 //routes
 
-app.use("/users", UserRouter);
+app.use("/profile", ProfileRouter);
+app.use("/user", UserRouter);
+app.use("/patient", PatientRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("hola mundo!");

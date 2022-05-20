@@ -9,17 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userChangeState = exports.createUser = void 0;
-const User_model_1 = require("../models/User.model");
-const createUser = (first_name, last_name, email, password, phone_number, address, role) => __awaiter(void 0, void 0, void 0, function* () {
+exports.createProfile = void 0;
+const Profile_model_1 = require("../models/Profile.model");
+const createProfile = (first_name, last_name, phone_number, address, user_id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const userCreated = yield User_model_1.Profile.create({
+        const userCreated = yield Profile_model_1.Profile.create({
             first_name,
             last_name,
-            email,
-            password,
             phone_number,
             address,
+            user_id,
         });
         return userCreated;
     }
@@ -27,16 +26,4 @@ const createUser = (first_name, last_name, email, password, phone_number, addres
         console.error(error);
     }
 });
-exports.createUser = createUser;
-const userChangeState = (id, is_deleted) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const userStatus = yield User_model_1.Profile.update({
-            is_deleted: is_deleted,
-        }, { where: { id: id } });
-        return userStatus;
-    }
-    catch (error) {
-        console.error(error);
-    }
-});
-exports.userChangeState = userChangeState;
+exports.createProfile = createProfile;
