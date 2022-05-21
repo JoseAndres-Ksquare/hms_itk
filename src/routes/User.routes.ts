@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import { createUser, readUser } from "../firebase/methods";
+import { createUser } from "../firebase/methods";
 import { hasRole } from "../middlewares/hasRole";
 import { isAuth } from "../middlewares/isAuthenticated";
 import { disableUser } from "../firebase/methods";
@@ -13,7 +13,7 @@ UserRouter.post("/", async (req: Request, res: Response) => {
     res.status(400);
     return res.send({ error: "All fields are required" });
   }
-  if (role === "admin" || role === "doctor") {
+  if (role === "Admin" || role === "Doctor") {
     res.status(400);
     return res.send({ error: "Invalid role" });
   }
@@ -32,7 +32,7 @@ UserRouter.delete(
   isAuth,
   hasRole({
     roles: ["Admin"],
-    allowSameUser: true,
+    allowSameUser: false,
   }),
   async (req: Request, res: Response) => {
     const { userId } = req.params;

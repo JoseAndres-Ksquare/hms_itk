@@ -1,8 +1,15 @@
 import { Sequelize } from "sequelize";
 import { initProfileModel } from "./Profile.model";
 import { initPatientModel } from "./Patient.model";
+import { initDoctorModel } from "./Doctor.model";
+import { initAppointmentModel } from "./Appointments.model";
 
-const models = [initProfileModel, initPatientModel];
+const models = [
+  initProfileModel,
+  initPatientModel,
+  initDoctorModel,
+  initAppointmentModel,
+];
 
 export let sequelize: Sequelize;
 export const initSequelize = (

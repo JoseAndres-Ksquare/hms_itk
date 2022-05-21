@@ -56,6 +56,7 @@ interface Doctor {
 interface Appointments {
   id: number;
   appointment_date: string; //date
+  description: string; //varchar()
   doctor_info: Doctor; //  user/doctor id
   patient_info: Patient; // user/patient id
 }
