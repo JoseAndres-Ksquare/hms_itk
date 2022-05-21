@@ -9,12 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProfileRouter = void 0;
-const express_1 = require("express");
-const profile_service_1 = require("../services/profile.service");
-exports.ProfileRouter = (0, express_1.Router)();
-exports.ProfileRouter.post("/createProfile", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const userCreation = yield (0, profile_service_1.createProfile)(req.body.first_name, req.body.last_name, req.body.phone_number, req.body.address, req.body.user_id);
-    res.statusCode = 200;
-    res.send(userCreation);
-}));
+exports.createDoctor = void 0;
+const Doctor_model_1 = require("../models/Doctor.model");
+const createDoctor = (medical_speciality, professional_license, ProfileId) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const doctorCreated = yield Doctor_model_1.Doctor.create({
+            medical_speciality,
+            professional_license,
+            ProfileId,
+        });
+        return doctorCreated;
+    }
+    catch (error) {
+        console.error(error);
+    }
+});
+exports.createDoctor = createDoctor;

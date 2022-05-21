@@ -5,6 +5,8 @@ import { ProfileRouter } from "./routes/Profile.routes";
 import * as admin from "firebase-admin";
 import { UserRouter } from "./routes/User.routes";
 import { PatientRouter } from "./routes/Patient.routes";
+import { DoctorRouter } from "./routes/Doctor.routes";
+import { AppointmentRouter } from "./routes/Appointment.routes";
 
 dotenv.config();
 admin.initializeApp();
@@ -24,6 +26,8 @@ app.use(express.json());
 app.use("/profile", ProfileRouter);
 app.use("/user", UserRouter);
 app.use("/patient", PatientRouter);
+app.use("/doctor", DoctorRouter);
+app.use("/appointment", AppointmentRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("hola mundo!");

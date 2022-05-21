@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.disableUser = exports.getInfo = exports.readUser = exports.createUser = void 0;
+exports.disableUser = exports.createUser = void 0;
 const admin = __importStar(require("firebase-admin"));
 const createUser = (email, password, role, isDisabled) => __awaiter(void 0, void 0, void 0, function* () {
     const { uid } = yield admin.auth().createUser({
@@ -53,16 +53,15 @@ const mapToUser = (user) => {
         isDisabled: user.disabled,
     };
 };
-const readUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield admin.auth().getUser(userId);
-    return mapToUser(user);
-});
-exports.readUser = readUser;
-const getInfo = (idToken) => __awaiter(void 0, void 0, void 0, function* () {
-    const info = yield admin.auth().verifyIdToken(idToken);
-    return info;
-});
-exports.getInfo = getInfo;
+/* export const readUser = async (userId: string) => {
+  const user = await admin.auth().getUser(userId);
+
+  return mapToUser(user);
+}; */
+/* export const getInfo = async (idToken: string) => {
+  const info = await admin.auth().verifyIdToken(idToken);
+  return info;
+}; */
 const disableUser = (uid, disabled) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield admin.auth().updateUser(uid, { disabled });
     return mapToUser(user);

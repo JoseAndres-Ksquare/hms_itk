@@ -22,7 +22,7 @@ exports.UserRouter.post("/", (req, res) => __awaiter(void 0, void 0, void 0, fun
         res.status(400);
         return res.send({ error: "All fields are required" });
     }
-    if (role === "admin" || role === "doctor") {
+    if (role === "Admin" || role === "Doctor") {
         res.status(400);
         return res.send({ error: "Invalid role" });
     }
@@ -38,7 +38,7 @@ exports.UserRouter.post("/", (req, res) => __awaiter(void 0, void 0, void 0, fun
 }));
 exports.UserRouter.delete("/:userId", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({
     roles: ["Admin"],
-    allowSameUser: true,
+    allowSameUser: false,
 }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId } = req.params;
     const { isDisabled } = req.body;

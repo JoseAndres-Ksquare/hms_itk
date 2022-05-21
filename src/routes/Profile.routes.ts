@@ -14,10 +14,3 @@ ProfileRouter.post("/createProfile", async (req: Request, res: Response) => {
   res.statusCode = 200;
   res.send(userCreation);
 });
-
-/* ProfileRouter.put("/softDelete", async (req: Request, res: Response) => {
-  const userStatus = await ProfileChangeState(req.body.id, req.body.is_deleted);
-  res.statusCode = 200;
-  res.send("userStatus changed for the user with id: " + req.body.id);
-});
- */

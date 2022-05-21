@@ -9,15 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PatientRouter = void 0;
+exports.DoctorRouter = void 0;
 const express_1 = require("express");
 const hasRole_1 = require("../middlewares/hasRole");
 const isAuthenticated_1 = require("../middlewares/isAuthenticated");
-const patient_service_1 = require("../services/patient.service");
-exports.PatientRouter = (0, express_1.Router)();
-exports.PatientRouter.post("/createPatient", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: true }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const patient = yield (0, patient_service_1.createPatient)(req.body.birth_date, req.body.age, req.body.blood_type, req.body.alergies, req.body.gender, req.body.ProfileId);
+const doctor_service_1 = require("../services/doctor.service");
+exports.DoctorRouter = (0, express_1.Router)();
+exports.DoctorRouter.post("/createDoctor", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: false }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const patient = yield (0, doctor_service_1.createDoctor)(req.body.medical_speciality, req.body.professional_license, req.body.ProfileId);
     res.statusCode = 200;
     res.send(patient);
 }));
-//SELECT * FROM "Profiles" INNER JOIN "Patients" ON "Profiles".id= "Patients"."ProfileId";

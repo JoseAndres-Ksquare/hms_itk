@@ -22,3 +22,4 @@ PatientRouter.post(
     res.send(patient);
   }
 );
+//SELECT * FROM "Profiles" INNER JOIN "Patients" ON "Profiles".id= "Patients"."ProfileId";

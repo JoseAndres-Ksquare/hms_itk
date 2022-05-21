@@ -33,6 +33,8 @@ const Profile_routes_1 = require("./routes/Profile.routes");
 const admin = __importStar(require("firebase-admin"));
 const User_routes_1 = require("./routes/User.routes");
 const Patient_routes_1 = require("./routes/Patient.routes");
+const Doctor_routes_1 = require("./routes/Doctor.routes");
+const Appointment_routes_1 = require("./routes/Appointment.routes");
 dotenv_1.default.config();
 admin.initializeApp();
 const app = (0, express_1.default)();
@@ -47,6 +49,8 @@ app.use(express_1.default.json());
 app.use("/profile", Profile_routes_1.ProfileRouter);
 app.use("/user", User_routes_1.UserRouter);
 app.use("/patient", Patient_routes_1.PatientRouter);
+app.use("/doctor", Doctor_routes_1.DoctorRouter);
+app.use("/appointment", Appointment_routes_1.AppointmentRouter);
 app.get("/", (req, res) => {
     res.send("hola mundo!");
 });
