@@ -1,12 +1,13 @@
 import express, { Response, Request } from "express";
 import dotenv from "dotenv";
+import * as admin from "firebase-admin";
 import { initSequelize } from "./models";
 import { ProfileRouter } from "./routes/Profile.routes";
-import * as admin from "firebase-admin";
 import { UserRouter } from "./routes/User.routes";
 import { PatientRouter } from "./routes/Patient.routes";
 import { DoctorRouter } from "./routes/Doctor.routes";
 import { AppointmentRouter } from "./routes/Appointment.routes";
+import { AdminRouter } from "./routes/Admin.routes";
 
 dotenv.config();
 admin.initializeApp();
@@ -28,6 +29,7 @@ app.use("/user", UserRouter);
 app.use("/patient", PatientRouter);
 app.use("/doctor", DoctorRouter);
 app.use("/appointment", AppointmentRouter);
+app.use("/admin", AdminRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("hola mundo!");

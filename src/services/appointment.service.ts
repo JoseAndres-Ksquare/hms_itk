@@ -31,6 +31,16 @@ export const listAppointments = async () => {
     console.error(error);
   }
 };
+export const listPatientAppointments = async (id: number) => {
+  try {
+    const allAppointments = await Appointment.findAll({
+      where: { PatientId: id },
+    });
+    return allAppointments;
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 export const findAppointment = async (id: number) => {
   try {

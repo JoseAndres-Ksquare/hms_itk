@@ -7,8 +7,8 @@ import {
   doctorModifyAppointment,
   filterDoctorAppointments,
   findAppointment,
-  listAppointments,
   listDoctorAppointments,
+  listPatientAppointments,
 } from "../services/appointment.service";
 
 export const AppointmentRouter = Router();
@@ -31,14 +31,16 @@ AppointmentRouter.post(
   }
 );
 
+listPatientAppointments;
 AppointmentRouter.get(
-  "/list",
+  "/patientApointments/:id",
   isAuth,
   hasRole({ roles: ["Admin"], allowSameUser: true }),
   async (req: Request, res: Response) => {
-    const allAppointments = await listAppointments();
+    const { id } = req.params;
+    const allDoctorAppointments = await listPatientAppointments(+id);
     res.statusCode = 200;
-    res.send(allAppointments);
+    res.send(allDoctorAppointments);
   }
 );
 

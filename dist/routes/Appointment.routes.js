@@ -20,10 +20,12 @@ exports.AppointmentRouter.post("/create", isAuthenticated_1.isAuth, (0, hasRole_
     res.statusCode = 200;
     res.send(appointment);
 }));
-exports.AppointmentRouter.get("/list", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: true }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const allAppointments = yield (0, appointment_service_1.listAppointments)();
+appointment_service_1.listPatientAppointments;
+exports.AppointmentRouter.get("/patientApointments/:id", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: true }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const allDoctorAppointments = yield (0, appointment_service_1.listPatientAppointments)(+id);
     res.statusCode = 200;
-    res.send(allAppointments);
+    res.send(allDoctorAppointments);
 }));
 exports.AppointmentRouter.get("/:id", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: true }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;

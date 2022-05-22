@@ -59,6 +59,9 @@ const isAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
         res.locals = Object.assign(Object.assign({}, res.locals), { email: decodedToken.email, uid: decodedToken.uid, role: decodedToken.role });
         return next();
     }
-    catch (error) { }
+    catch (error) {
+        console.error(error);
+        return res.send({ error: "Not authorized" });
+    }
 });
 exports.isAuth = isAuth;

@@ -33,5 +33,8 @@ export const isAuth = async (req: Request, res: Response, next: Function) => {
       role: decodedToken.role,
     };
     return next();
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+    return res.send({ error: "Not authorized" });
+  }
 };
