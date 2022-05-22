@@ -53,15 +53,6 @@ const mapToUser = (user) => {
         isDisabled: user.disabled,
     };
 };
-/* export const readUser = async (userId: string) => {
-  const user = await admin.auth().getUser(userId);
-
-  return mapToUser(user);
-}; */
-/* export const getInfo = async (idToken: string) => {
-  const info = await admin.auth().verifyIdToken(idToken);
-  return info;
-}; */
 const disableUser = (uid, disabled) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield admin.auth().updateUser(uid, { disabled });
     return mapToUser(user);

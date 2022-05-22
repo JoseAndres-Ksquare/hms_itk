@@ -28,13 +28,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const admin = __importStar(require("firebase-admin"));
 const models_1 = require("./models");
 const Profile_routes_1 = require("./routes/Profile.routes");
-const admin = __importStar(require("firebase-admin"));
 const User_routes_1 = require("./routes/User.routes");
 const Patient_routes_1 = require("./routes/Patient.routes");
 const Doctor_routes_1 = require("./routes/Doctor.routes");
 const Appointment_routes_1 = require("./routes/Appointment.routes");
+const Admin_routes_1 = require("./routes/Admin.routes");
 dotenv_1.default.config();
 admin.initializeApp();
 const app = (0, express_1.default)();
@@ -51,6 +52,7 @@ app.use("/user", User_routes_1.UserRouter);
 app.use("/patient", Patient_routes_1.PatientRouter);
 app.use("/doctor", Doctor_routes_1.DoctorRouter);
 app.use("/appointment", Appointment_routes_1.AppointmentRouter);
+app.use("/admin", Admin_routes_1.AdminRouter);
 app.get("/", (req, res) => {
     res.send("hola mundo!");
 });

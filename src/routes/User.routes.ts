@@ -1,15 +1,14 @@
 import { Router, Request, Response } from "express";
-import { createUser } from "../firebase/methods";
+import { createUser, disableUser } from "../firebase/methods";
 import { hasRole } from "../middlewares/hasRole";
 import { isAuth } from "../middlewares/isAuthenticated";
-import { disableUser } from "../firebase/methods";
 
 export const UserRouter = Router();
 
 UserRouter.post("/", async (req: Request, res: Response) => {
-  const { email, password, role, isDisabled } = req.body;
+  const { email, password, role } = req.body;
 
-  if (!email || !password || !role || isDisabled === undefined) {
+  if (!email || !password || !role) {
     res.status(400);
     return res.send({ error: "All fields are required" });
   }
@@ -18,7 +17,7 @@ UserRouter.post("/", async (req: Request, res: Response) => {
     return res.send({ error: "Invalid role" });
   }
   try {
-    const userId = await createUser(email, password, role, isDisabled);
+    const userId = await createUser(email, password, role, false);
     res.status(201).send({
       userId,
     });
@@ -32,20 +31,13 @@ UserRouter.delete(
   isAuth,
   hasRole({
     roles: ["Admin"],
-    allowSameUser: false,
+    allowSameUser: true,
   }),
   async (req: Request, res: Response) => {
     const { userId } = req.params;
-    const { isDisabled } = req.body;
-
-    if (isDisabled === undefined || isDisabled === null) {
-      return res.status(400).send({
-        error: "no fields to update",
-      });
-    }
 
     try {
-      const user = await disableUser(userId, isDisabled);
+      const user = await disableUser(userId, true);
       return res.status(200).send(user);
     } catch (error) {
       return res.status(500).send({ error: "something went wrong" });
