@@ -16,6 +16,15 @@ const isAuthenticated_1 = require("../middlewares/isAuthenticated");
 const patient_service_1 = require("../services/patient.service");
 exports.PatientRouter = (0, express_1.Router)();
 exports.PatientRouter.post("/createPatient", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: true }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.body.birth_date ||
+        !req.body.age ||
+        !req.body.blood_type ||
+        !req.body.alergies ||
+        !req.body.gender ||
+        !req.body.ProfileId) {
+        res.status(400);
+        return res.send({ error: "All fields are required" });
+    }
     const patient = yield (0, patient_service_1.createPatient)(req.body.birth_date, req.body.age, req.body.blood_type, req.body.alergies, req.body.gender, req.body.ProfileId);
     res.statusCode = 200;
     res.send(patient);

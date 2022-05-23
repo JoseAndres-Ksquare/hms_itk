@@ -10,6 +10,17 @@ PatientRouter.post(
   isAuth,
   hasRole({ roles: ["Admin"], allowSameUser: true }),
   async (req: Request, res: Response) => {
+    if (
+      !req.body.birth_date ||
+      !req.body.age ||
+      !req.body.blood_type ||
+      !req.body.alergies ||
+      !req.body.gender ||
+      !req.body.ProfileId
+    ) {
+      res.status(400);
+      return res.send({ error: "All fields are required" });
+    }
     const patient = await createPatient(
       req.body.birth_date,
       req.body.age,

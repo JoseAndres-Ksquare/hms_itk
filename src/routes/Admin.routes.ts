@@ -2,7 +2,10 @@ import { Router, Request, Response } from "express";
 import { createUser, disableUser } from "../firebase/methods";
 import { hasRole } from "../middlewares/hasRole";
 import { isAuth } from "../middlewares/isAuthenticated";
-import { listAppointments } from "../services/appointment.service";
+import {
+  listAppointments,
+  listFinishedAppointments,
+} from "../services/appointment.service";
 
 export const AdminRouter = Router();
 
@@ -53,12 +56,24 @@ AdminRouter.patch(
 );
 
 AdminRouter.get(
-  "/list",
+  "/listAppointments",
   isAuth,
   hasRole({ roles: ["Admin"], allowSameUser: false }),
   async (req: Request, res: Response) => {
     const allAppointments = await listAppointments();
     res.statusCode = 200;
     res.send(allAppointments);
+  }
+);
+
+AdminRouter.get(
+  "/listFinishedAppointments/:status",
+  isAuth,
+  hasRole({ roles: ["Admin"], allowSameUser: false }),
+  async (req: Request, res: Response) => {
+    const { status } = req.params;
+    const allFinishedAppointments = await listFinishedAppointments(status);
+    res.statusCode = 200;
+    res.send(allFinishedAppointments);
   }
 );

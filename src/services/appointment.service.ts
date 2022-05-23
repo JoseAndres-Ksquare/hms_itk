@@ -131,3 +131,14 @@ export const filterDoctorAppointments = async (
     console.error(error);
   }
 };
+
+export const listFinishedAppointments = async (status: string) => {
+  try {
+    const allFinishedAppointments = await Appointment.findAll({
+      where: { status: status },
+    });
+    return allFinishedAppointments;
+  } catch (error) {
+    console.error(error);
+  }
+};

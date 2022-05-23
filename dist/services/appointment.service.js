@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.filterDoctorAppointments = exports.doctorModifyAppointment = exports.listDoctorAppointments = exports.deleteAppointment = exports.findAppointment = exports.listPatientAppointments = exports.listAppointments = exports.createAppointment = void 0;
+exports.listFinishedAppointments = exports.filterDoctorAppointments = exports.doctorModifyAppointment = exports.listDoctorAppointments = exports.deleteAppointment = exports.findAppointment = exports.listPatientAppointments = exports.listAppointments = exports.createAppointment = void 0;
 const Appointments_model_1 = require("../models/Appointments.model");
 const createAppointment = (appointment_date, appointment_hour, description, status, DoctorId, PatientId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -130,3 +130,15 @@ const filterDoctorAppointments = (id, filter, valueFilter) => __awaiter(void 0, 
     }
 });
 exports.filterDoctorAppointments = filterDoctorAppointments;
+const listFinishedAppointments = (status) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const allFinishedAppointments = yield Appointments_model_1.Appointment.findAll({
+            where: { status: status },
+        });
+        return allFinishedAppointments;
+    }
+    catch (error) {
+        console.error(error);
+    }
+});
+exports.listFinishedAppointments = listFinishedAppointments;

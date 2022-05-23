@@ -49,8 +49,14 @@ exports.AdminRouter.patch("/activateUser/:userId", isAuthenticated_1.isAuth, (0,
         return res.status(500).send({ error: "something went wrong" });
     }
 }));
-exports.AdminRouter.get("/list", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: false }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.AdminRouter.get("/listAppointments", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: false }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const allAppointments = yield (0, appointment_service_1.listAppointments)();
     res.statusCode = 200;
     res.send(allAppointments);
+}));
+exports.AdminRouter.get("/listFinishedAppointments/:status", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: false }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { status } = req.params;
+    const allFinishedAppointments = yield (0, appointment_service_1.listFinishedAppointments)(status);
+    res.statusCode = 200;
+    res.send(allFinishedAppointments);
 }));
