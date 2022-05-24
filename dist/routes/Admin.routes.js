@@ -60,3 +60,9 @@ exports.AdminRouter.get("/listFinishedAppointments/:status", isAuthenticated_1.i
     res.statusCode = 200;
     res.send(allFinishedAppointments);
 }));
+exports.AdminRouter.get("/listAppointmentsByColumn/:filter", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: false }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { filter } = req.params;
+    const allAppointments = yield (0, appointment_service_1.changeColumnWay)(filter);
+    res.statusCode = 200;
+    res.send(allAppointments);
+}));

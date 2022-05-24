@@ -22,7 +22,12 @@ export class Profile extends Model<
 export const initProfileModel = (sequelize: Sequelize) => {
   Profile.init(
     {
-      id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+        unique: true,
+      },
       first_name: { type: DataTypes.STRING, allowNull: false },
       last_name: { type: DataTypes.STRING, allowNull: false },
       phone_number: { type: DataTypes.STRING, allowNull: false },

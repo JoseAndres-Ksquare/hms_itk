@@ -15,6 +15,6 @@ const initPatientModel = (sequelize) => {
         alergies: { type: sequelize_1.DataTypes.STRING, allowNull: false },
         gender: { type: sequelize_1.DataTypes.STRING, allowNull: false },
     }, { sequelize });
-    Patient.belongsTo(Profile_model_1.Profile);
+    Patient.belongsTo(Profile_model_1.Profile, { targetKey: "id" });
 };
 exports.initPatientModel = initPatientModel;

@@ -12,6 +12,6 @@ const initDoctorModel = (sequelize) => {
         medical_speciality: { type: sequelize_1.DataTypes.STRING, allowNull: false },
         professional_license: { type: sequelize_1.DataTypes.STRING, allowNull: false },
     }, { sequelize });
-    Doctor.belongsTo(Profile_model_1.Profile);
+    Doctor.belongsTo(Profile_model_1.Profile, { targetKey: "id" });
 };
 exports.initDoctorModel = initDoctorModel;

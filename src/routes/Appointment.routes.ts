@@ -31,7 +31,6 @@ AppointmentRouter.post(
   }
 );
 
-listPatientAppointments;
 AppointmentRouter.get(
   "/patientApointments/:id",
   isAuth,
@@ -113,17 +112,25 @@ AppointmentRouter.patch(
 );
 
 AppointmentRouter.get(
-  "/doctorApointments/:id/:filter/:valueFilter",
+  "/doctorApointments/:id/:filter/:valueFilter/:orderWay",
   isAuth,
   hasRole({ roles: ["Admin"], allowSameUser: true }),
   async (req: Request, res: Response) => {
-    const { id, filter, valueFilter } = req.params;
+    const { id, filter, valueFilter, orderWay } = req.params;
     const allDoctorAppointments = await filterDoctorAppointments(
       +id,
       filter,
-      valueFilter
+      valueFilter,
+      orderWay
     );
     res.statusCode = 200;
     res.send(allDoctorAppointments);
   }
+);
+
+AppointmentRouter.get(
+  "/orderAppointments/:column",
+  isAuth,
+  hasRole({ roles: ["Admin"], allowSameUser: true }),
+  async (req: Request, res: Response) => {}
 );

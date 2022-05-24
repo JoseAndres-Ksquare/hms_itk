@@ -17,7 +17,7 @@ export class Appointment extends Model<
   declare appointment_date: Date;
   declare appointment_hour: string;
   declare description: string;
-  declare status: string; // in process, finished, cancelled.
+  declare status: string; // in process, finished.
   DoctorId?: number;
   PatientId?: number;
 }

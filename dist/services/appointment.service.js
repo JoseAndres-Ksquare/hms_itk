@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.listFinishedAppointments = exports.filterDoctorAppointments = exports.doctorModifyAppointment = exports.listDoctorAppointments = exports.deleteAppointment = exports.findAppointment = exports.listPatientAppointments = exports.listAppointments = exports.createAppointment = void 0;
+exports.changeColumnWay = exports.paginationDoctorAppointments = exports.paginationPatientAppointments = exports.listFinishedAppointments = exports.filterDoctorAppointments = exports.doctorModifyAppointment = exports.listDoctorAppointments = exports.deleteAppointment = exports.findAppointment = exports.listPatientAppointments = exports.listAppointments = exports.createAppointment = void 0;
 const Appointments_model_1 = require("../models/Appointments.model");
 const createAppointment = (appointment_date, appointment_hour, description, status, DoctorId, PatientId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -28,9 +28,12 @@ const createAppointment = (appointment_date, appointment_hour, description, stat
     }
 });
 exports.createAppointment = createAppointment;
-const listAppointments = () => __awaiter(void 0, void 0, void 0, function* () {
+const listAppointments = (offset, limit) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const allAppointments = yield Appointments_model_1.Appointment.findAll();
+        const allAppointments = yield Appointments_model_1.Appointment.findAll({
+            limit: limit,
+            offset: offset,
+        });
         return allAppointments;
     }
     catch (error) {
@@ -92,7 +95,7 @@ const doctorModifyAppointment = (id, date, hour) => __awaiter(void 0, void 0, vo
     }
 });
 exports.doctorModifyAppointment = doctorModifyAppointment;
-const filterDoctorAppointments = (id, filter, valueFilter) => __awaiter(void 0, void 0, void 0, function* () {
+const filterDoctorAppointments = (id, filter, valueFilter, orderWay) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let filterDocAppointments;
         switch (filter) {
@@ -102,6 +105,7 @@ const filterDoctorAppointments = (id, filter, valueFilter) => __awaiter(void 0, 
                         DoctorId: id,
                         PatientId: valueFilter,
                     },
+                    order: [["id", orderWay]],
                 });
                 break;
             case "appointment_date":
@@ -110,6 +114,7 @@ const filterDoctorAppointments = (id, filter, valueFilter) => __awaiter(void 0, 
                         DoctorId: id,
                         appointment_date: valueFilter,
                     },
+                    order: [["id", orderWay]],
                 });
                 break;
             case "appointment_hour":
@@ -118,6 +123,7 @@ const filterDoctorAppointments = (id, filter, valueFilter) => __awaiter(void 0, 
                         DoctorId: id,
                         appointment_hour: valueFilter,
                     },
+                    order: [["id", orderWay]],
                 });
                 break;
             default:
@@ -142,3 +148,28 @@ const listFinishedAppointments = (status) => __awaiter(void 0, void 0, void 0, f
     }
 });
 exports.listFinishedAppointments = listFinishedAppointments;
+const paginationPatientAppointments = (id, offset, limit) => __awaiter(void 0, void 0, void 0, function* () {
+    const AppointmentPages = yield Appointments_model_1.Appointment.findAll({
+        where: { PatientId: id },
+        limit: limit,
+        offset: offset,
+    });
+    return AppointmentPages;
+});
+exports.paginationPatientAppointments = paginationPatientAppointments;
+const paginationDoctorAppointments = (id, offset, limit) => __awaiter(void 0, void 0, void 0, function* () {
+    const AppointmentPages = yield Appointments_model_1.Appointment.findAll({
+        where: { DoctorId: id },
+        limit: limit,
+        offset: offset,
+    });
+    return AppointmentPages;
+});
+exports.paginationDoctorAppointments = paginationDoctorAppointments;
+const changeColumnWay = (filter) => __awaiter(void 0, void 0, void 0, function* () {
+    const changeWay = yield Appointments_model_1.Appointment.findAll({
+        order: [[filter, "ASC"]],
+    });
+    return changeWay;
+});
+exports.changeColumnWay = changeColumnWay;

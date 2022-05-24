@@ -23,9 +23,12 @@ export const createAppointment = async (
   }
 };
 
-export const listAppointments = async () => {
+export const listAppointments = async (offset?: number, limit?: number) => {
   try {
-    const allAppointments = await Appointment.findAll();
+    const allAppointments = await Appointment.findAll({
+      limit: limit,
+      offset: offset,
+    });
     return allAppointments;
   } catch (error) {
     console.error(error);
@@ -93,7 +96,8 @@ export const doctorModifyAppointment = async (
 export const filterDoctorAppointments = async (
   id: number,
   filter: string,
-  valueFilter: any
+  valueFilter: any,
+  orderWay: string
 ) => {
   try {
     let filterDocAppointments;
@@ -104,6 +108,7 @@ export const filterDoctorAppointments = async (
             DoctorId: id,
             PatientId: valueFilter,
           },
+          order: [["id", orderWay]],
         });
         break;
       case "appointment_date":
@@ -112,6 +117,7 @@ export const filterDoctorAppointments = async (
             DoctorId: id,
             appointment_date: valueFilter,
           },
+          order: [["id", orderWay]],
         });
         break;
       case "appointment_hour":
@@ -120,6 +126,7 @@ export const filterDoctorAppointments = async (
             DoctorId: id,
             appointment_hour: valueFilter,
           },
+          order: [["id", orderWay]],
         });
         break;
 
@@ -141,4 +148,37 @@ export const listFinishedAppointments = async (status: string) => {
   } catch (error) {
     console.error(error);
   }
+};
+
+export const paginationPatientAppointments = async (
+  id: number,
+  offset: number,
+  limit: number
+) => {
+  const AppointmentPages = await Appointment.findAll({
+    where: { PatientId: id },
+    limit: limit,
+    offset: offset,
+  });
+  return AppointmentPages;
+};
+
+export const paginationDoctorAppointments = async (
+  id: number,
+  offset: number,
+  limit: number
+) => {
+  const AppointmentPages = await Appointment.findAll({
+    where: { DoctorId: id },
+    limit: limit,
+    offset: offset,
+  });
+  return AppointmentPages;
+};
+
+export const changeColumnWay = async (filter: string) => {
+  const changeWay = await Appointment.findAll({
+    order: [[filter, "ASC"]],
+  });
+  return changeWay;
 };

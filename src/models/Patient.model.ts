@@ -34,5 +34,5 @@ export const initPatientModel = (sequelize: Sequelize) => {
 
     { sequelize }
   );
-  Patient.belongsTo(Profile);
+  Patient.belongsTo(Profile, { targetKey: "id" });
 };

@@ -3,6 +3,7 @@ import { createUser, disableUser } from "../firebase/methods";
 import { hasRole } from "../middlewares/hasRole";
 import { isAuth } from "../middlewares/isAuthenticated";
 import {
+  changeColumnWay,
   listAppointments,
   listFinishedAppointments,
 } from "../services/appointment.service";
@@ -75,5 +76,17 @@ AdminRouter.get(
     const allFinishedAppointments = await listFinishedAppointments(status);
     res.statusCode = 200;
     res.send(allFinishedAppointments);
+  }
+);
+
+AdminRouter.get(
+  "/listAppointmentsByColumn/:filter",
+  isAuth,
+  hasRole({ roles: ["Admin"], allowSameUser: false }),
+  async (req: Request, res: Response) => {
+    const { filter } = req.params;
+    const allAppointments = await changeColumnWay(filter);
+    res.statusCode = 200;
+    res.send(allAppointments);
   }
 );

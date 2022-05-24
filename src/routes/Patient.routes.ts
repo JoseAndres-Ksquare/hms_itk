@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import { hasRole } from "../middlewares/hasRole";
 import { isAuth } from "../middlewares/isAuthenticated";
+import { paginationPatientAppointments } from "../services/appointment.service";
 import { createPatient } from "../services/patient.service";
 
 export const PatientRouter = Router();
@@ -33,4 +34,16 @@ PatientRouter.post(
     res.send(patient);
   }
 );
+
+PatientRouter.get(
+  "/appointmentPages/:id/:offset/:limit",
+  isAuth,
+  hasRole({ roles: ["Admin"], allowSameUser: true }),
+  async (req: Request, res: Response) => {
+    const { id, offset, limit } = req.params;
+    const pages = await paginationPatientAppointments(+id, +offset, +limit);
+    res.status(200).send({ pages });
+  }
+);
+
 //SELECT * FROM "Profiles" INNER JOIN "Patients" ON "Profiles".id= "Patients"."ProfileId";

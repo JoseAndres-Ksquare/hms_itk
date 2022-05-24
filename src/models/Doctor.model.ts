@@ -28,5 +28,5 @@ export const initDoctorModel = (sequelize: Sequelize) => {
 
     { sequelize }
   );
-  Doctor.belongsTo(Profile);
+  Doctor.belongsTo(Profile, { targetKey: "id" });
 };
