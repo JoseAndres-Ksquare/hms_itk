@@ -1,5 +1,22 @@
 # hms_itk
 
+## Install dependencies
+> ### npm install  
+> ### npm install -D
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## User Model
 
 ### This will be my parent model and contains the basic information I need to define each user in a general way.
