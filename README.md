@@ -1,8 +1,8 @@
 # hms_itk
 
 ## Install dependencies
-> ### npm install  
-> ### npm install -D
+> ### `npm install ` 
+> ### `npm install -D`
 
 
 
