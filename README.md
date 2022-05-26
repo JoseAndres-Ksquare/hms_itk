@@ -1,5 +1,27 @@
 # hms_itk
 
+## Install dependencies
+> ### `npm install ` 
+> ### `npm install -D`
+
+## How to run
+> ### `npm run dev`
+
+## Define yours enviroment variables
+> ![image](https://user-images.githubusercontent.com/102169092/170383713-7db777b5-a09e-4dd8-a8e6-8e3cc8059f66.png)
+
+
+## Requests Collection
+> [https://www.getpostman.com/collections/5a552e39be04d792610d ](https://www.getpostman.com/collections/5a552e39be04d792610d)
+
+
+
+
+
+
+
+
+
 ## User Model
 
 ### This will be my parent model and contains the basic information I need to define each user in a general way.
