@@ -44,3 +44,30 @@ UserRouter.delete(
     }
   }
 );
+
+UserRouter.post(
+  "/createAdmin",
+  isAuth,
+  hasRole({ roles: [""], allowSameUser: true }),
+
+  async (req: Request, res: Response) => {
+    const { email, password, role } = req.body;
+
+    if (!email || !password || !role) {
+      res.status(400);
+      return res.send({ error: "All fields are required" });
+    }
+    if (role !== "Admin") {
+      res.status(400);
+      return res.send({ error: "Invalid role" });
+    }
+    try {
+      const userId = await createUser(email, password, role, false);
+      res.status(201).send({
+        userId,
+      });
+    } catch (error) {
+      res.status(500).send({ error: "something went wrong" });
+    }
+  }
+);

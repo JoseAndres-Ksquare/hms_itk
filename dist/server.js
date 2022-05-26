@@ -39,7 +39,7 @@ const Admin_routes_1 = require("./routes/Admin.routes");
 dotenv_1.default.config();
 admin.initializeApp();
 const app = (0, express_1.default)();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 const db_name = process.env.DB_NAME;
 const db_username = process.env.DB_USERNAME;
 const db_password = process.env.DB_PASSWORD;

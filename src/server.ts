@@ -12,7 +12,7 @@ import { AdminRouter } from "./routes/Admin.routes";
 dotenv.config();
 admin.initializeApp();
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 const db_name = <string>process.env.DB_NAME;
 const db_username = <string>process.env.DB_USERNAME;
