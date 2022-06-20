@@ -36,7 +36,7 @@ exports.AdminRouter.post("/createrDoctor", isAuthenticated_1.isAuth, (0, hasRole
         res.status(500).send({ error: "something went wrong" });
     }
 }));
-exports.AdminRouter.patch("/activateUser/:userId", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({
+exports.AdminRouter.patch("/activateUser", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({
     roles: ["Admin"],
     allowSameUser: false,
 }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -50,19 +50,57 @@ exports.AdminRouter.patch("/activateUser/:userId", isAuthenticated_1.isAuth, (0,
     }
 }));
 exports.AdminRouter.get("/listAppointments", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: false }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const allAppointments = yield (0, appointment_service_1.listAppointments)();
-    res.statusCode = 200;
-    res.send(allAppointments);
+    try {
+        const allAppointments = yield (0, appointment_service_1.listAppointments)();
+        res.statusCode = 200;
+        res.send(allAppointments);
+    }
+    catch (error) {
+        return res.status(500).send({ error: "something went wrong" });
+    }
 }));
 exports.AdminRouter.get("/listFinishedAppointments/:status", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: false }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { status } = req.params;
-    const allFinishedAppointments = yield (0, appointment_service_1.listFinishedAppointments)(status);
-    res.statusCode = 200;
-    res.send(allFinishedAppointments);
+    try {
+        const allFinishedAppointments = yield (0, appointment_service_1.listFinishedAppointments)(status);
+        res.statusCode = 200;
+        res.send(allFinishedAppointments);
+    }
+    catch (error) {
+        return res.status(500).send({ error: "something went wrong" });
+    }
 }));
-exports.AdminRouter.get("/listAppointmentsByColumn/:filter", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: false }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+/* AdminRouter.get(
+  "/listAppointmentsByColumn/:filter",
+  isAuth,
+  hasRole({ roles: ["Admin"], allowSameUser: false }),
+  async (req: Request, res: Response) => {
     const { filter } = req.params;
-    const allAppointments = yield (0, appointment_service_1.changeColumnWay)(filter);
-    res.statusCode = 200;
-    res.send(allAppointments);
+    try {
+      const allAppointments = await changeColumnWay(filter);
+      res.statusCode = 200;
+      res.send(allAppointments);
+    } catch (error) {
+      return res.status(500).send({ error: "something went wrong" });
+    }
+  }
+); */
+//query Param
+exports.AdminRouter.get("/filterAppointments", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: false }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { DoctorId, PatientId, status } = JSON.parse(req.query.where || "{}");
+        const where = {
+            DoctorId,
+            PatientId,
+            status,
+        };
+        Object.keys(where).forEach((key) => {
+            where[key] === undefined ? delete where[key] : {};
+        });
+        const searchAllDoctorAppointments = yield (0, appointment_service_1.DoctorAppointmentsAdmin)(where);
+        res.status(200).send(searchAllDoctorAppointments);
+    }
+    catch (error) {
+        res.status(500).send({ error: "something went wrong" });
+    }
 }));

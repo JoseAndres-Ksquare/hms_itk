@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createProfile = void 0;
+exports.listProfiles = exports.readProfile = exports.createProfile = void 0;
 const Profile_model_1 = require("../models/Profile.model");
 const createProfile = (first_name, last_name, phone_number, address, user_id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -27,3 +27,23 @@ const createProfile = (first_name, last_name, phone_number, address, user_id) =>
     }
 });
 exports.createProfile = createProfile;
+const readProfile = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const profile = yield Profile_model_1.Profile.findAll({ where: { user_id: userId } });
+        return profile;
+    }
+    catch (error) {
+        throw error;
+    }
+});
+exports.readProfile = readProfile;
+const listProfiles = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const profile = yield Profile_model_1.Profile.findAll();
+        return profile;
+    }
+    catch (error) {
+        throw error;
+    }
+});
+exports.listProfiles = listProfiles;

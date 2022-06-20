@@ -21,7 +21,7 @@ const createDoctor = (medical_speciality, professional_license, ProfileId) => __
         return doctorCreated;
     }
     catch (error) {
-        console.error(error);
+        throw error;
     }
 });
 exports.createDoctor = createDoctor;

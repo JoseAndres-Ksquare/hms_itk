@@ -11,13 +11,17 @@ DoctorRouter.post(
   isAuth,
   hasRole({ roles: ["Admin"], allowSameUser: false }),
   async (req: Request, res: Response) => {
-    const patient = await createDoctor(
-      req.body.medical_speciality,
-      req.body.professional_license,
-      req.body.ProfileId
-    );
-    res.statusCode = 200;
-    res.send(patient);
+    try {
+      const patient = await createDoctor(
+        req.body.medical_speciality,
+        req.body.professional_license,
+        req.body.ProfileId
+      );
+      res.statusCode = 200;
+      res.send(patient);
+    } catch (error) {
+      return res.status(500).send({ error: "something went wrong" });
+    }
   }
 );
 
@@ -26,8 +30,12 @@ DoctorRouter.get(
   isAuth,
   hasRole({ roles: ["Admin"], allowSameUser: true }),
   async (req: Request, res: Response) => {
-    const { id, offset, limit } = req.params;
-    const pages = await paginationDoctorAppointments(+id, +offset, +limit);
-    res.status(200).send({ pages });
+    try {
+      const { id, offset, limit } = req.params;
+      const pages = await paginationDoctorAppointments(+id, +offset, +limit);
+      res.status(200).send({ pages });
+    } catch (error) {
+      return res.status(500).send({ error: "something went wrong" });
+    }
   }
 );

@@ -27,9 +27,7 @@ exports.UserRouter.post("/", (req, res) => __awaiter(void 0, void 0, void 0, fun
     }
     try {
         const userId = yield (0, methods_1.createUser)(email, password, role, false);
-        res.status(201).send({
-            userId,
-        });
+        res.status(201).send(userId);
     }
     catch (error) {
         res.status(500).send({ error: "something went wrong" });

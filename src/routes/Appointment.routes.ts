@@ -6,7 +6,6 @@ import {
   deleteAppointment,
   doctorModifyAppointment,
   filterDoctorAppointments,
-  findAppointment,
   listDoctorAppointments,
   listPatientAppointments,
 } from "../services/appointment.service";
@@ -14,49 +13,47 @@ import {
 export const AppointmentRouter = Router();
 
 AppointmentRouter.post(
-  "/create",
+  "/create/:userId",
   isAuth,
   hasRole({ roles: ["Admin"], allowSameUser: true }),
   async (req: Request, res: Response) => {
-    const appointment = await createAppointment(
-      req.body.appointment_date,
-      req.body.appointment_hour,
-      req.body.description,
-      req.body.status,
-      req.body.DoctorId,
-      req.body.PatientId
-    );
-    res.statusCode = 200;
-    res.send(appointment);
+    try {
+      const appointment = await createAppointment(
+        req.body.appointment_date,
+        req.body.appointment_hour,
+        req.body.description,
+        req.body.status,
+        req.body.DoctorId,
+        req.body.PatientId
+      );
+      res.statusCode = 200;
+      res.send(appointment);
+    } catch (error) {
+      return res.status(500).send({ error: "something went wrong" });
+    }
   }
 );
 
 AppointmentRouter.get(
-  "/patientApointments/:id",
+  "/patientApointments/:id/:userId",
   isAuth,
   hasRole({ roles: ["Admin"], allowSameUser: true }),
   async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const allDoctorAppointments = await listPatientAppointments(+id);
-    res.statusCode = 200;
-    res.send(allDoctorAppointments);
-  }
-);
+    console.log(res.locals);
 
-AppointmentRouter.get(
-  "/:id",
-  isAuth,
-  hasRole({ roles: ["Admin"], allowSameUser: true }),
-  async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const allAppointments = await findAppointment(+id);
-    res.statusCode = 200;
-    res.send(allAppointments);
+    try {
+      const { id } = req.params;
+      const allDoctorAppointments = await listPatientAppointments(+id);
+      res.statusCode = 200;
+      res.send(allDoctorAppointments);
+    } catch (error) {
+      return res.status(500).send({ error: "something went wrong" });
+    }
   }
 );
 
 AppointmentRouter.delete(
-  "/:id",
+  "/:id/:userId",
   isAuth,
   hasRole({
     roles: ["Admin"],
@@ -76,19 +73,28 @@ AppointmentRouter.delete(
 );
 
 AppointmentRouter.get(
-  "/doctorApointments/:id",
+  "/doctorApointments/:id/:userId",
   isAuth,
   hasRole({ roles: ["Admin"], allowSameUser: true }),
   async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const allDoctorAppointments = await listDoctorAppointments(+id);
-    res.statusCode = 200;
-    res.send(allDoctorAppointments);
+    try {
+      const { id } = req.params;
+      const { limit, offset } = req.query;
+      const allDoctorAppointments = await listDoctorAppointments(
+        +id,
+        limit ? +limit : 5,
+        offset ? +offset : 0
+      );
+      res.statusCode = 200;
+      res.send(allDoctorAppointments);
+    } catch (error) {
+      return res.status(500).send({ error: "something went wrong" });
+    }
   }
 );
 
 AppointmentRouter.patch(
-  "/updateAppointment/:id",
+  "/updateAppointment/:id/:userId",
   isAuth,
   hasRole({
     roles: ["Admin"],
@@ -112,6 +118,35 @@ AppointmentRouter.patch(
 );
 
 AppointmentRouter.get(
+  "/doctorApointments/:userId",
+  isAuth,
+  hasRole({ roles: ["Admin"], allowSameUser: true }),
+  async (req: Request, res: Response) => {
+    try {
+      const { DoctorId, PatientId, appointment_date, appointment_hour } =
+        JSON.parse((req.query.where as string) || "{}");
+
+      const where = {
+        DoctorId,
+        PatientId,
+        appointment_date,
+        appointment_hour,
+      };
+      if (!where.DoctorId)
+        res.status(403).send({ error: "DoctorId is required" });
+      if (!where.PatientId) delete where.PatientId;
+      if (!where.appointment_date) delete where.appointment_date;
+      if (!where.appointment_hour) delete where.appointment_hour;
+      //  if (!where.orderWay) where.orderWay = "ASC";
+      const searchAllDoctorAppointments = await filterDoctorAppointments(where);
+      res.status(200).send(searchAllDoctorAppointments);
+    } catch (error) {
+      res.status(500).send({ error: "something went wrong" });
+    }
+  }
+);
+
+/* AppointmentRouter.get(
   "/doctorApointments/:id/:filter/:valueFilter/:orderWay",
   isAuth,
   hasRole({ roles: ["Admin"], allowSameUser: true }),
@@ -127,10 +162,4 @@ AppointmentRouter.get(
     res.send(allDoctorAppointments);
   }
 );
-
-AppointmentRouter.get(
-  "/orderAppointments/:column",
-  isAuth,
-  hasRole({ roles: ["Admin"], allowSameUser: true }),
-  async (req: Request, res: Response) => {}
-);
+ */

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.changeColumnWay = exports.paginationDoctorAppointments = exports.paginationPatientAppointments = exports.listFinishedAppointments = exports.filterDoctorAppointments = exports.doctorModifyAppointment = exports.listDoctorAppointments = exports.deleteAppointment = exports.findAppointment = exports.listPatientAppointments = exports.listAppointments = exports.createAppointment = void 0;
+exports.changeColumnWay = exports.paginationDoctorAppointments = exports.paginationPatientAppointments = exports.listFinishedAppointments = exports.DoctorAppointmentsAdmin = exports.filterDoctorAppointments = exports.doctorModifyAppointment = exports.listDoctorAppointments = exports.deleteAppointment = exports.findAppointment = exports.listPatientAppointments = exports.listAppointments = exports.createAppointment = void 0;
 const Appointments_model_1 = require("../models/Appointments.model");
 const createAppointment = (appointment_date, appointment_hour, description, status, DoctorId, PatientId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -24,7 +24,7 @@ const createAppointment = (appointment_date, appointment_hour, description, stat
         return appointmentCreated;
     }
     catch (error) {
-        console.error(error);
+        throw error;
     }
 });
 exports.createAppointment = createAppointment;
@@ -37,7 +37,7 @@ const listAppointments = (offset, limit) => __awaiter(void 0, void 0, void 0, fu
         return allAppointments;
     }
     catch (error) {
-        console.error(error);
+        throw error;
     }
 });
 exports.listAppointments = listAppointments;
@@ -49,7 +49,7 @@ const listPatientAppointments = (id) => __awaiter(void 0, void 0, void 0, functi
         return allAppointments;
     }
     catch (error) {
-        console.error(error);
+        throw error;
     }
 });
 exports.listPatientAppointments = listPatientAppointments;
@@ -59,7 +59,7 @@ const findAppointment = (id) => __awaiter(void 0, void 0, void 0, function* () {
         return allAppointments;
     }
     catch (error) {
-        console.error(error);
+        throw error;
     }
 });
 exports.findAppointment = findAppointment;
@@ -69,19 +69,21 @@ const deleteAppointment = (id, status) => __awaiter(void 0, void 0, void 0, func
         return deleteAppointment;
     }
     catch (error) {
-        console.error(error);
+        throw error;
     }
 });
 exports.deleteAppointment = deleteAppointment;
-const listDoctorAppointments = (id) => __awaiter(void 0, void 0, void 0, function* () {
+const listDoctorAppointments = (id, limit, offset) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const allAppointments = yield Appointments_model_1.Appointment.findAll({
             where: { DoctorId: id },
+            limit: limit,
+            offset: offset,
         });
         return allAppointments;
     }
     catch (error) {
-        console.error(error);
+        throw error;
     }
 });
 exports.listDoctorAppointments = listDoctorAppointments;
@@ -91,51 +93,34 @@ const doctorModifyAppointment = (id, date, hour) => __awaiter(void 0, void 0, vo
         return modifyAppointmentDate;
     }
     catch (error) {
-        console.error(error);
+        throw error;
     }
 });
 exports.doctorModifyAppointment = doctorModifyAppointment;
-const filterDoctorAppointments = (id, filter, valueFilter, orderWay) => __awaiter(void 0, void 0, void 0, function* () {
+const filterDoctorAppointments = (where) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let filterDocAppointments;
-        switch (filter) {
-            case "PatientId":
-                filterDocAppointments = Appointments_model_1.Appointment.findAll({
-                    where: {
-                        DoctorId: id,
-                        PatientId: valueFilter,
-                    },
-                    order: [["id", orderWay]],
-                });
-                break;
-            case "appointment_date":
-                filterDocAppointments = Appointments_model_1.Appointment.findAll({
-                    where: {
-                        DoctorId: id,
-                        appointment_date: valueFilter,
-                    },
-                    order: [["id", orderWay]],
-                });
-                break;
-            case "appointment_hour":
-                filterDocAppointments = Appointments_model_1.Appointment.findAll({
-                    where: {
-                        DoctorId: id,
-                        appointment_hour: valueFilter,
-                    },
-                    order: [["id", orderWay]],
-                });
-                break;
-            default:
-                break;
-        }
+        const filterDocAppointments = Appointments_model_1.Appointment.findAll({
+            where,
+        });
         return filterDocAppointments;
     }
     catch (error) {
-        console.error(error);
+        throw error;
     }
 });
 exports.filterDoctorAppointments = filterDoctorAppointments;
+const DoctorAppointmentsAdmin = (where) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const filterDocAppointments = Appointments_model_1.Appointment.findAll({
+            where,
+        });
+        return filterDocAppointments;
+    }
+    catch (error) {
+        throw error;
+    }
+});
+exports.DoctorAppointmentsAdmin = DoctorAppointmentsAdmin;
 const listFinishedAppointments = (status) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const allFinishedAppointments = yield Appointments_model_1.Appointment.findAll({
@@ -144,7 +129,7 @@ const listFinishedAppointments = (status) => __awaiter(void 0, void 0, void 0, f
         return allFinishedAppointments;
     }
     catch (error) {
-        console.error(error);
+        throw error;
     }
 });
 exports.listFinishedAppointments = listFinishedAppointments;

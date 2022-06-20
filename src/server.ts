@@ -8,6 +8,7 @@ import { PatientRouter } from "./routes/Patient.routes";
 import { DoctorRouter } from "./routes/Doctor.routes";
 import { AppointmentRouter } from "./routes/Appointment.routes";
 import { AdminRouter } from "./routes/Admin.routes";
+import cors from "cors";
 
 dotenv.config();
 admin.initializeApp();
@@ -20,6 +21,7 @@ const db_password = <string>process.env.DB_PASSWORD;
 const db_hostname = <string>process.env.DB_HOST;
 
 //middleware
+app.use(cors());
 app.use(express.json());
 
 //routes

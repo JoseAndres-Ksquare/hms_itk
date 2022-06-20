@@ -3,7 +3,7 @@ import { createUser, disableUser } from "../firebase/methods";
 import { hasRole } from "../middlewares/hasRole";
 import { isAuth } from "../middlewares/isAuthenticated";
 import {
-  changeColumnWay,
+  DoctorAppointmentsAdmin,
   listAppointments,
   listFinishedAppointments,
 } from "../services/appointment.service";
@@ -38,7 +38,7 @@ AdminRouter.post(
 );
 
 AdminRouter.patch(
-  "/activateUser/:userId",
+  "/activateUser",
   isAuth,
   hasRole({
     roles: ["Admin"],
@@ -61,9 +61,13 @@ AdminRouter.get(
   isAuth,
   hasRole({ roles: ["Admin"], allowSameUser: false }),
   async (req: Request, res: Response) => {
-    const allAppointments = await listAppointments();
-    res.statusCode = 200;
-    res.send(allAppointments);
+    try {
+      const allAppointments = await listAppointments();
+      res.statusCode = 200;
+      res.send(allAppointments);
+    } catch (error) {
+      return res.status(500).send({ error: "something went wrong" });
+    }
   }
 );
 
@@ -73,20 +77,56 @@ AdminRouter.get(
   hasRole({ roles: ["Admin"], allowSameUser: false }),
   async (req: Request, res: Response) => {
     const { status } = req.params;
-    const allFinishedAppointments = await listFinishedAppointments(status);
-    res.statusCode = 200;
-    res.send(allFinishedAppointments);
+    try {
+      const allFinishedAppointments = await listFinishedAppointments(status);
+      res.statusCode = 200;
+      res.send(allFinishedAppointments);
+    } catch (error) {
+      return res.status(500).send({ error: "something went wrong" });
+    }
   }
 );
 
-AdminRouter.get(
+/* AdminRouter.get(
   "/listAppointmentsByColumn/:filter",
   isAuth,
   hasRole({ roles: ["Admin"], allowSameUser: false }),
   async (req: Request, res: Response) => {
     const { filter } = req.params;
-    const allAppointments = await changeColumnWay(filter);
-    res.statusCode = 200;
-    res.send(allAppointments);
+    try {
+      const allAppointments = await changeColumnWay(filter);
+      res.statusCode = 200;
+      res.send(allAppointments);
+    } catch (error) {
+      return res.status(500).send({ error: "something went wrong" });
+    }
+  }
+); */
+//query Param
+AdminRouter.get(
+  "/filterAppointments",
+  isAuth,
+  hasRole({ roles: ["Admin"], allowSameUser: false }),
+  async (req: Request, res: Response) => {
+    try {
+      const { DoctorId, PatientId, status } = JSON.parse(
+        (req.query.where as string) || "{}"
+      );
+
+      const where = {
+        DoctorId,
+        PatientId,
+        status,
+      };
+
+      (Object.keys(where) as (keyof typeof where)[]).forEach((key) => {
+        where[key] === undefined ? delete where[key] : {};
+      });
+
+      const searchAllDoctorAppointments = await DoctorAppointmentsAdmin(where);
+      res.status(200).send(searchAllDoctorAppointments);
+    } catch (error) {
+      res.status(500).send({ error: "something went wrong" });
+    }
   }
 );

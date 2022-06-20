@@ -14,7 +14,31 @@ const express_1 = require("express");
 const profile_service_1 = require("../services/profile.service");
 exports.ProfileRouter = (0, express_1.Router)();
 exports.ProfileRouter.post("/createProfile", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const userCreation = yield (0, profile_service_1.createProfile)(req.body.first_name, req.body.last_name, req.body.phone_number, req.body.address, req.body.user_id);
-    res.statusCode = 200;
-    res.send(userCreation);
+    try {
+        const userCreation = yield (0, profile_service_1.createProfile)(req.body.first_name, req.body.last_name, req.body.phone_number, req.body.address, req.body.user_id);
+        res.statusCode = 200;
+        res.send(userCreation);
+    }
+    catch (error) {
+        return res.status(500).send({ error: "something went wrong" });
+    }
+}));
+exports.ProfileRouter.get("/profiles/:userId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { userId } = req.params;
+        const profile = yield (0, profile_service_1.readProfile)(userId);
+        res.status(200).send(profile);
+    }
+    catch (error) {
+        res.status(500).send({ error: "something went wrong" });
+    }
+}));
+exports.ProfileRouter.get("/listProfiles", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const profile = yield (0, profile_service_1.listProfiles)();
+        res.status(200).send(profile);
+    }
+    catch (error) {
+        res.status(500).send({ error: "something went wrong" });
+    }
 }));

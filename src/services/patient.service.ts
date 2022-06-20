@@ -19,6 +19,15 @@ export const createPatient = async (
     });
     return patientCreated;
   } catch (error) {
-    console.error(error);
+    throw error;
+  }
+};
+
+export const fetchPatients = async () => {
+  try {
+    const allPatients = await Patient.findAll();
+    return allPatients;
+  } catch (error) {
+    throw error;
   }
 };

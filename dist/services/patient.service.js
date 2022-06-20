@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createPatient = void 0;
+exports.fetchPatients = exports.createPatient = void 0;
 const Patient_model_1 = require("../models/Patient.model");
 const createPatient = (birth_date, age, blood_type, alergies, gender, ProfileId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -24,7 +24,17 @@ const createPatient = (birth_date, age, blood_type, alergies, gender, ProfileId)
         return patientCreated;
     }
     catch (error) {
-        console.error(error);
+        throw error;
     }
 });
 exports.createPatient = createPatient;
+const fetchPatients = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const allPatients = yield Patient_model_1.Patient.findAll();
+        return allPatients;
+    }
+    catch (error) {
+        throw error;
+    }
+});
+exports.fetchPatients = fetchPatients;

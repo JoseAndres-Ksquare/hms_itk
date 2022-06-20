@@ -19,7 +19,7 @@ export const createAppointment = async (
     });
     return appointmentCreated;
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };
 
@@ -31,7 +31,7 @@ export const listAppointments = async (offset?: number, limit?: number) => {
     });
     return allAppointments;
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };
 export const listPatientAppointments = async (id: number) => {
@@ -41,7 +41,7 @@ export const listPatientAppointments = async (id: number) => {
     });
     return allAppointments;
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };
 
@@ -50,7 +50,7 @@ export const findAppointment = async (id: number) => {
     const allAppointments = await Appointment.findByPk(id);
     return allAppointments;
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };
 
@@ -62,18 +62,24 @@ export const deleteAppointment = async (id: number, status: string) => {
     );
     return deleteAppointment;
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };
 
-export const listDoctorAppointments = async (id: number) => {
+export const listDoctorAppointments = async (
+  id: number,
+  limit?: number,
+  offset?: number
+) => {
   try {
     const allAppointments = await Appointment.findAll({
       where: { DoctorId: id },
+      limit: limit,
+      offset: offset,
     });
     return allAppointments;
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };
 
@@ -89,53 +95,31 @@ export const doctorModifyAppointment = async (
     );
     return modifyAppointmentDate;
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };
 
-export const filterDoctorAppointments = async (
-  id: number,
-  filter: string,
-  valueFilter: any,
-  orderWay: string
-) => {
+export const filterDoctorAppointments = async (where: any) => {
   try {
-    let filterDocAppointments;
-    switch (filter) {
-      case "PatientId":
-        filterDocAppointments = Appointment.findAll({
-          where: {
-            DoctorId: id,
-            PatientId: valueFilter,
-          },
-          order: [["id", orderWay]],
-        });
-        break;
-      case "appointment_date":
-        filterDocAppointments = Appointment.findAll({
-          where: {
-            DoctorId: id,
-            appointment_date: valueFilter,
-          },
-          order: [["id", orderWay]],
-        });
-        break;
-      case "appointment_hour":
-        filterDocAppointments = Appointment.findAll({
-          where: {
-            DoctorId: id,
-            appointment_hour: valueFilter,
-          },
-          order: [["id", orderWay]],
-        });
-        break;
+    const filterDocAppointments = Appointment.findAll({
+      where,
+    });
 
-      default:
-        break;
-    }
     return filterDocAppointments;
   } catch (error) {
-    console.error(error);
+    throw error;
+  }
+};
+
+export const DoctorAppointmentsAdmin = async (where: any) => {
+  try {
+    const filterDocAppointments = Appointment.findAll({
+      where,
+    });
+
+    return filterDocAppointments;
+  } catch (error) {
+    throw error;
   }
 };
 
@@ -146,7 +130,7 @@ export const listFinishedAppointments = async (status: string) => {
     });
     return allFinishedAppointments;
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };
 
