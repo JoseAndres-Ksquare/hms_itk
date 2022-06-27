@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.changeColumnWay = exports.paginationDoctorAppointments = exports.paginationPatientAppointments = exports.listFinishedAppointments = exports.DoctorAppointmentsAdmin = exports.filterDoctorAppointments = exports.doctorModifyAppointment = exports.listDoctorAppointments = exports.deleteAppointment = exports.findAppointment = exports.listPatientAppointments = exports.listAppointments = exports.createAppointment = void 0;
+exports.changeColumnWay = exports.paginationDoctorAppointments = exports.paginationPatientAppointments = exports.listFinishedAppointments = exports.DoctorAppointmentsAdmin = exports.filterDoctorAppointments = exports.doctorModifyAppointment = exports.listDoctorAppointments = exports.deleteAppointment = exports.findAppointment = exports.listPatientAppointmentsFinished = exports.listPatientAppointments = exports.listAppointments = exports.createAppointment = void 0;
 const Appointments_model_1 = require("../models/Appointments.model");
 const createAppointment = (appointment_date, appointment_hour, description, status, DoctorId, PatientId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -44,7 +44,7 @@ exports.listAppointments = listAppointments;
 const listPatientAppointments = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const allAppointments = yield Appointments_model_1.Appointment.findAll({
-            where: { PatientId: id },
+            where: { PatientId: id, status: "In progress" },
         });
         return allAppointments;
     }
@@ -53,6 +53,18 @@ const listPatientAppointments = (id) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.listPatientAppointments = listPatientAppointments;
+const listPatientAppointmentsFinished = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const allAppointments = yield Appointments_model_1.Appointment.findAll({
+            where: { PatientId: id, status: "Finished" },
+        });
+        return allAppointments;
+    }
+    catch (error) {
+        throw error;
+    }
+});
+exports.listPatientAppointmentsFinished = listPatientAppointmentsFinished;
 const findAppointment = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const allAppointments = yield Appointments_model_1.Appointment.findByPk(id);

@@ -10,8 +10,9 @@ import {
 export const ProfileRouter = Router();
 
 ProfileRouter.post(
-  "/createProfile",
-
+  "/createProfile/:userId",
+  isAuth,
+  hasRole({ roles: ["Admin"], allowSameUser: true }),
   async (req: Request, res: Response) => {
     try {
       const userCreation = await createProfile(
@@ -28,21 +29,31 @@ ProfileRouter.post(
     }
   }
 );
-ProfileRouter.get("/profiles/:userId", async (req: Request, res: Response) => {
-  try {
-    const { userId } = req.params;
-    const profile = await readProfile(userId);
-    res.status(200).send(profile);
-  } catch (error) {
-    res.status(500).send({ error: "something went wrong" });
+ProfileRouter.get(
+  "/profiles/:userId",
+  isAuth,
+  hasRole({ roles: ["Admin"], allowSameUser: true }),
+  async (req: Request, res: Response) => {
+    try {
+      const { userId } = req.params;
+      const profile = await readProfile(userId);
+      res.status(200).send(profile);
+    } catch (error) {
+      res.status(500).send({ error: "something went wrong" });
+    }
   }
-});
+);
 
-ProfileRouter.get("/listProfiles", async (req: Request, res: Response) => {
-  try {
-    const profile = await listProfiles();
-    res.status(200).send(profile);
-  } catch (error) {
-    res.status(500).send({ error: "something went wrong" });
+ProfileRouter.get(
+  "/listProfiles",
+  isAuth,
+  hasRole({ roles: ["Admin"], allowSameUser: true }),
+  async (req: Request, res: Response) => {
+    try {
+      const profile = await listProfiles();
+      res.status(200).send(profile);
+    } catch (error) {
+      res.status(500).send({ error: "something went wrong" });
+    }
   }
-});
+);

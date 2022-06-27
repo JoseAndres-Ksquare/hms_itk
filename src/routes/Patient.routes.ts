@@ -2,7 +2,12 @@ import { Router, Request, Response } from "express";
 import { hasRole } from "../middlewares/hasRole";
 import { isAuth } from "../middlewares/isAuthenticated";
 import { paginationPatientAppointments } from "../services/appointment.service";
-import { createPatient, fetchPatients } from "../services/patient.service";
+import {
+  createPatient,
+  fetchPatient,
+  fetchPatients,
+  patientJoin,
+} from "../services/patient.service";
 
 export const PatientRouter = Router();
 
@@ -61,6 +66,36 @@ PatientRouter.get(
   async (req: Request, res: Response) => {
     try {
       const patients = await fetchPatients();
+      res.status(200).send(patients);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+PatientRouter.get(
+  "/readPatient/:id/:userId",
+  isAuth,
+  hasRole({ roles: ["Admin"], allowSameUser: true }),
+  async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const patients = await fetchPatient(+id);
+      res.status(200).send(patients);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+PatientRouter.get(
+  "/patientAndProfile/:id/:userId",
+  isAuth,
+  hasRole({ roles: ["Admin"], allowSameUser: true }),
+  async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const patients = await patientJoin(+id);
       res.status(200).send(patients);
     } catch (error) {
       console.log(error);

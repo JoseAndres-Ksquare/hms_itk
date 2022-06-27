@@ -2,14 +2,20 @@ import { Router, Request, Response } from "express";
 import { hasRole } from "../middlewares/hasRole";
 import { isAuth } from "../middlewares/isAuthenticated";
 import { paginationDoctorAppointments } from "../services/appointment.service";
-import { createDoctor } from "../services/doctor.service";
+import {
+  createDoctor,
+  doctorJoin,
+  fetchDoctor,
+  fetchDoctors,
+} from "../services/doctor.service";
+import { fetchPatient } from "../services/patient.service";
 
 export const DoctorRouter = Router();
 
 DoctorRouter.post(
-  "/createDoctor",
+  "/createDoctor/:userId",
   isAuth,
-  hasRole({ roles: ["Admin"], allowSameUser: false }),
+  hasRole({ roles: ["Admin"], allowSameUser: true }),
   async (req: Request, res: Response) => {
     try {
       const patient = await createDoctor(
@@ -20,6 +26,8 @@ DoctorRouter.post(
       res.statusCode = 200;
       res.send(patient);
     } catch (error) {
+      console.log(error);
+
       return res.status(500).send({ error: "something went wrong" });
     }
   }
@@ -36,6 +44,50 @@ DoctorRouter.get(
       res.status(200).send({ pages });
     } catch (error) {
       return res.status(500).send({ error: "something went wrong" });
+    }
+  }
+);
+
+DoctorRouter.get(
+  "/readDoctor/:id/:userId",
+  isAuth,
+  hasRole({ roles: ["Admin"], allowSameUser: true }),
+  async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const doctor = await fetchDoctor(+id);
+      res.status(200).send(doctor);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+/* DoctorRouter.get(
+  "/alldoctors",
+  isAuth,
+  hasRole({ roles: ["Admin"], allowSameUser: false }),
+  async (req: Request, res: Response) => {
+    try {
+      const doctors = await fetchDoctors();
+      res.status(200).send(doctors);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+); */
+
+DoctorRouter.get(
+  "/doctorAndProfile/:id/:userId",
+  isAuth,
+  hasRole({ roles: ["Admin"], allowSameUser: true }),
+  async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const patients = await doctorJoin(+id);
+      res.status(200).send(patients);
+    } catch (error) {
+      console.log(error);
     }
   }
 );

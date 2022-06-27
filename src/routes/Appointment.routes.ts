@@ -8,6 +8,7 @@ import {
   filterDoctorAppointments,
   listDoctorAppointments,
   listPatientAppointments,
+  listPatientAppointmentsFinished,
 } from "../services/appointment.service";
 
 export const AppointmentRouter = Router();
@@ -29,6 +30,8 @@ AppointmentRouter.post(
       res.statusCode = 200;
       res.send(appointment);
     } catch (error) {
+      console.log(error);
+
       return res.status(500).send({ error: "something went wrong" });
     }
   }
@@ -39,11 +42,24 @@ AppointmentRouter.get(
   isAuth,
   hasRole({ roles: ["Admin"], allowSameUser: true }),
   async (req: Request, res: Response) => {
-    console.log(res.locals);
-
     try {
       const { id } = req.params;
       const allDoctorAppointments = await listPatientAppointments(+id);
+      res.statusCode = 200;
+      res.send(allDoctorAppointments);
+    } catch (error) {
+      return res.status(500).send({ error: "something went wrong" });
+    }
+  }
+);
+AppointmentRouter.get(
+  "/patientApointmentsFinished/:id/:userId",
+  isAuth,
+  hasRole({ roles: ["Admin"], allowSameUser: true }),
+  async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const allDoctorAppointments = await listPatientAppointmentsFinished(+id);
       res.statusCode = 200;
       res.send(allDoctorAppointments);
     } catch (error) {
@@ -61,7 +77,7 @@ AppointmentRouter.delete(
   }),
   async (req: Request, res: Response) => {
     const { id } = req.params;
-    const status = "finished";
+    const status = "Finished";
 
     try {
       await deleteAppointment(+id, status);
@@ -73,7 +89,7 @@ AppointmentRouter.delete(
 );
 
 AppointmentRouter.get(
-  "/doctorApointments/:id/:userId",
+  "/doctorApointment/:id/:userId",
   isAuth,
   hasRole({ roles: ["Admin"], allowSameUser: true }),
   async (req: Request, res: Response) => {
@@ -112,6 +128,8 @@ AppointmentRouter.patch(
       );
       return res.status(200).send(appointmentUpdated);
     } catch (error) {
+      console.log(error);
+
       return res.status(500).send({ error: "something went wrong" });
     }
   }
@@ -147,19 +165,13 @@ AppointmentRouter.get(
 );
 
 /* AppointmentRouter.get(
-  "/doctorApointments/:id/:filter/:valueFilter/:orderWay",
+  "/getDoctorAppointment/:id/:userId",
   isAuth,
   hasRole({ roles: ["Admin"], allowSameUser: true }),
   async (req: Request, res: Response) => {
-    const { id, filter, valueFilter, orderWay } = req.params;
-    const allDoctorAppointments = await filterDoctorAppointments(
-      +id,
-      filter,
-      valueFilter,
-      orderWay
-    );
+    const { id } = req.params;
+    const allDoctorAppointments = await getDoctorAppointment(+id);
     res.statusCode = 200;
     res.send(allDoctorAppointments);
   }
-);
- */
+); */

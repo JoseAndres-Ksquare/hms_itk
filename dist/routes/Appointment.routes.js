@@ -22,14 +22,25 @@ exports.AppointmentRouter.post("/create/:userId", isAuthenticated_1.isAuth, (0, 
         res.send(appointment);
     }
     catch (error) {
+        console.log(error);
         return res.status(500).send({ error: "something went wrong" });
     }
 }));
 exports.AppointmentRouter.get("/patientApointments/:id/:userId", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: true }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(res.locals);
     try {
         const { id } = req.params;
         const allDoctorAppointments = yield (0, appointment_service_1.listPatientAppointments)(+id);
+        res.statusCode = 200;
+        res.send(allDoctorAppointments);
+    }
+    catch (error) {
+        return res.status(500).send({ error: "something went wrong" });
+    }
+}));
+exports.AppointmentRouter.get("/patientApointmentsFinished/:id/:userId", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: true }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const allDoctorAppointments = yield (0, appointment_service_1.listPatientAppointmentsFinished)(+id);
         res.statusCode = 200;
         res.send(allDoctorAppointments);
     }
@@ -42,7 +53,7 @@ exports.AppointmentRouter.delete("/:id/:userId", isAuthenticated_1.isAuth, (0, h
     allowSameUser: true,
 }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const status = "finished";
+    const status = "Finished";
     try {
         yield (0, appointment_service_1.deleteAppointment)(+id, status);
         return res.status(200).send("appointment cancelled with id: " + id);
@@ -51,7 +62,7 @@ exports.AppointmentRouter.delete("/:id/:userId", isAuthenticated_1.isAuth, (0, h
         return res.status(500).send({ error: "something went wrong" });
     }
 }));
-exports.AppointmentRouter.get("/doctorApointments/:id/:userId", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: true }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.AppointmentRouter.get("/doctorApointment/:id/:userId", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: true }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
         const { limit, offset } = req.query;
@@ -74,6 +85,7 @@ exports.AppointmentRouter.patch("/updateAppointment/:id/:userId", isAuthenticate
         return res.status(200).send(appointmentUpdated);
     }
     catch (error) {
+        console.log(error);
         return res.status(500).send({ error: "something went wrong" });
     }
 }));
@@ -103,19 +115,13 @@ exports.AppointmentRouter.get("/doctorApointments/:userId", isAuthenticated_1.is
     }
 }));
 /* AppointmentRouter.get(
-  "/doctorApointments/:id/:filter/:valueFilter/:orderWay",
+  "/getDoctorAppointment/:id/:userId",
   isAuth,
   hasRole({ roles: ["Admin"], allowSameUser: true }),
   async (req: Request, res: Response) => {
-    const { id, filter, valueFilter, orderWay } = req.params;
-    const allDoctorAppointments = await filterDoctorAppointments(
-      +id,
-      filter,
-      valueFilter,
-      orderWay
-    );
+    const { id } = req.params;
+    const allDoctorAppointments = await getDoctorAppointment(+id);
     res.statusCode = 200;
     res.send(allDoctorAppointments);
   }
-);
- */
+); */

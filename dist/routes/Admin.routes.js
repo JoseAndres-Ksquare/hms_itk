@@ -15,8 +15,10 @@ const methods_1 = require("../firebase/methods");
 const hasRole_1 = require("../middlewares/hasRole");
 const isAuthenticated_1 = require("../middlewares/isAuthenticated");
 const appointment_service_1 = require("../services/appointment.service");
+const doctor_service_1 = require("../services/doctor.service");
+const patient_service_1 = require("../services/patient.service");
 exports.AdminRouter = (0, express_1.Router)();
-exports.AdminRouter.post("/createrDoctor", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: false }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.AdminRouter.post("/createDoctor", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin", "undefined"], allowSameUser: false }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password, role } = req.body;
     if (role !== "Doctor") {
         res.status(400);
@@ -102,5 +104,23 @@ exports.AdminRouter.get("/filterAppointments", isAuthenticated_1.isAuth, (0, has
     }
     catch (error) {
         res.status(500).send({ error: "something went wrong" });
+    }
+}));
+exports.AdminRouter.get("/patientsAndProfiles/", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: false }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const patients = yield (0, patient_service_1.allPatientsJoin)();
+        res.status(200).send(patients);
+    }
+    catch (error) {
+        console.log(error);
+    }
+}));
+exports.AdminRouter.get("/doctorsAndProfiles/", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin", "Patient"], allowSameUser: false }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const patients = yield (0, doctor_service_1.allDoctorsJoin)();
+        res.status(200).send(patients);
+    }
+    catch (error) {
+        console.log(error);
     }
 }));

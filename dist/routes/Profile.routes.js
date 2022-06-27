@@ -11,9 +11,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProfileRouter = void 0;
 const express_1 = require("express");
+const hasRole_1 = require("../middlewares/hasRole");
+const isAuthenticated_1 = require("../middlewares/isAuthenticated");
 const profile_service_1 = require("../services/profile.service");
 exports.ProfileRouter = (0, express_1.Router)();
-exports.ProfileRouter.post("/createProfile", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.ProfileRouter.post("/createProfile/:userId", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: true }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userCreation = yield (0, profile_service_1.createProfile)(req.body.first_name, req.body.last_name, req.body.phone_number, req.body.address, req.body.user_id);
         res.statusCode = 200;
@@ -23,7 +25,7 @@ exports.ProfileRouter.post("/createProfile", (req, res) => __awaiter(void 0, voi
         return res.status(500).send({ error: "something went wrong" });
     }
 }));
-exports.ProfileRouter.get("/profiles/:userId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.ProfileRouter.get("/profiles/:userId", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: true }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userId } = req.params;
         const profile = yield (0, profile_service_1.readProfile)(userId);
@@ -33,7 +35,7 @@ exports.ProfileRouter.get("/profiles/:userId", (req, res) => __awaiter(void 0, v
         res.status(500).send({ error: "something went wrong" });
     }
 }));
-exports.ProfileRouter.get("/listProfiles", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.ProfileRouter.get("/listProfiles", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: true }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const profile = yield (0, profile_service_1.listProfiles)();
         res.status(200).send(profile);

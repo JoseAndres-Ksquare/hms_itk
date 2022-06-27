@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createDoctor = void 0;
+exports.allDoctorsJoin = exports.doctorJoin = exports.fetchDoctors = exports.fetchDoctor = exports.createDoctor = void 0;
 const Doctor_model_1 = require("../models/Doctor.model");
+const Profile_model_1 = require("../models/Profile.model");
 const createDoctor = (medical_speciality, professional_license, ProfileId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const doctorCreated = yield Doctor_model_1.Doctor.create({
@@ -25,3 +26,48 @@ const createDoctor = (medical_speciality, professional_license, ProfileId) => __
     }
 });
 exports.createDoctor = createDoctor;
+const fetchDoctor = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const readDoctor = yield Doctor_model_1.Doctor.findAll({ where: { ProfileId: id } });
+        return readDoctor;
+    }
+    catch (error) {
+        throw error;
+    }
+});
+exports.fetchDoctor = fetchDoctor;
+const fetchDoctors = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const allDoctors = yield Doctor_model_1.Doctor.findAll();
+        return allDoctors;
+    }
+    catch (error) {
+        throw error;
+    }
+});
+exports.fetchDoctors = fetchDoctors;
+const doctorJoin = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const doctorAndProfile = yield Doctor_model_1.Doctor.findAll({
+            where: { ProfileId: id },
+            include: [{ model: Profile_model_1.Profile, required: true }],
+        });
+        return doctorAndProfile;
+    }
+    catch (errors) {
+        throw errors;
+    }
+});
+exports.doctorJoin = doctorJoin;
+const allDoctorsJoin = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const doctorsAndProfiles = yield Doctor_model_1.Doctor.findAll({
+            include: [{ model: Profile_model_1.Profile, required: true }],
+        });
+        return doctorsAndProfiles;
+    }
+    catch (errors) {
+        throw errors;
+    }
+});
+exports.allDoctorsJoin = allDoctorsJoin;

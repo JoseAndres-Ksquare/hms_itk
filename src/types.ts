@@ -1,1 +1,1 @@
-export type Role = "Patient" | "Doctor" | "Admin" | "";
+export type Role = "Patient" | "Doctor" | "Admin" | "undefined";

@@ -7,13 +7,15 @@ import {
   listAppointments,
   listFinishedAppointments,
 } from "../services/appointment.service";
+import { allDoctorsJoin } from "../services/doctor.service";
+import { allPatientsJoin } from "../services/patient.service";
 
 export const AdminRouter = Router();
 
 AdminRouter.post(
-  "/createrDoctor",
+  "/createDoctor",
   isAuth,
-  hasRole({ roles: ["Admin"], allowSameUser: false }),
+  hasRole({ roles: ["Admin", "undefined"], allowSameUser: false }),
   async (req: Request, res: Response) => {
     const { email, password, role } = req.body;
 
@@ -127,6 +129,34 @@ AdminRouter.get(
       res.status(200).send(searchAllDoctorAppointments);
     } catch (error) {
       res.status(500).send({ error: "something went wrong" });
+    }
+  }
+);
+
+AdminRouter.get(
+  "/patientsAndProfiles/",
+  isAuth,
+  hasRole({ roles: ["Admin"], allowSameUser: false }),
+  async (req: Request, res: Response) => {
+    try {
+      const patients = await allPatientsJoin();
+      res.status(200).send(patients);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+AdminRouter.get(
+  "/doctorsAndProfiles/",
+  isAuth,
+  hasRole({ roles: ["Admin", "Patient"], allowSameUser: false }),
+  async (req: Request, res: Response) => {
+    try {
+      const patients = await allDoctorsJoin();
+      res.status(200).send(patients);
+    } catch (error) {
+      console.log(error);
     }
   }
 );

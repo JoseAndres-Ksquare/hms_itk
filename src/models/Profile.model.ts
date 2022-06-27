@@ -32,7 +32,7 @@ export const initProfileModel = (sequelize: Sequelize) => {
       last_name: { type: DataTypes.STRING, allowNull: false },
       phone_number: { type: DataTypes.STRING, allowNull: false },
       address: { type: DataTypes.STRING, allowNull: false },
-      user_id: { type: DataTypes.STRING, allowNull: false },
+      user_id: { type: DataTypes.STRING, allowNull: false, unique: true },
     },
     { sequelize }
   );

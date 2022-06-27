@@ -37,7 +37,18 @@ export const listAppointments = async (offset?: number, limit?: number) => {
 export const listPatientAppointments = async (id: number) => {
   try {
     const allAppointments = await Appointment.findAll({
-      where: { PatientId: id },
+      where: { PatientId: id, status: "In progress" },
+    });
+    return allAppointments;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const listPatientAppointmentsFinished = async (id: number) => {
+  try {
+    const allAppointments = await Appointment.findAll({
+      where: { PatientId: id, status: "Finished" },
     });
     return allAppointments;
   } catch (error) {

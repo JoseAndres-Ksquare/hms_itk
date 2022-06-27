@@ -17,7 +17,7 @@ const initProfileModel = (sequelize) => {
         last_name: { type: sequelize_1.DataTypes.STRING, allowNull: false },
         phone_number: { type: sequelize_1.DataTypes.STRING, allowNull: false },
         address: { type: sequelize_1.DataTypes.STRING, allowNull: false },
-        user_id: { type: sequelize_1.DataTypes.STRING, allowNull: false },
+        user_id: { type: sequelize_1.DataTypes.STRING, allowNull: false, unique: true },
     }, { sequelize });
 };
 exports.initProfileModel = initProfileModel;

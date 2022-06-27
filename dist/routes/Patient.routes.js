@@ -54,4 +54,24 @@ exports.PatientRouter.get("/allpatients", isAuthenticated_1.isAuth, (0, hasRole_
         console.log(error);
     }
 }));
+exports.PatientRouter.get("/readPatient/:id/:userId", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: true }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const patients = yield (0, patient_service_1.fetchPatient)(+id);
+        res.status(200).send(patients);
+    }
+    catch (error) {
+        console.log(error);
+    }
+}));
+exports.PatientRouter.get("/patientAndProfile/:id/:userId", isAuthenticated_1.isAuth, (0, hasRole_1.hasRole)({ roles: ["Admin"], allowSameUser: true }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const patients = yield (0, patient_service_1.patientJoin)(+id);
+        res.status(200).send(patients);
+    }
+    catch (error) {
+        console.log(error);
+    }
+}));
 //SELECT * FROM "Profiles" INNER JOIN "Patients" ON "Profiles".id= "Patients"."ProfileId";
